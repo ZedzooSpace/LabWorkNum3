@@ -3,11 +3,20 @@ package ru.zotov.city;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 public class City {
     private String name;
-    private Map<City, Integer> roads;
+
+    private Map<String, Road> roads;
+
+    private static class Road {
+        City destination;
+        int cost;
+
+        Road(City destination, int cost) {
+            this.destination = destination;
+            this.cost = cost;
+        }
+    }
 
     public City(String name) {
         this.name = name;
@@ -15,14 +24,19 @@ public class City {
     }
 
     public Map<City, Integer> getRoads() {
-        return roads;
+        Map<City, Integer> result = new HashMap<>();
+        for (Road road : roads.values()) {
+            result.put(road.destination, road.cost);
+        }
+        return result;
     }
+
     public void addRoad(City destination, int cost) {
-        this.roads.put(destination, cost);
+        this.roads.put(destination.getName(), new Road(destination, cost));
     }
 
     public void removeRoad(City destination) {
-        this.roads.remove(destination);
+        this.roads.remove(destination.getName());
     }
 
     public String getName() {
@@ -35,15 +49,16 @@ public class City {
         if (!roads.isEmpty()) {
             sb.append(" [");
             boolean first = true;
-            for (Map.Entry<City, Integer> entry : roads.entrySet()) {
+            for (Road road : roads.values()) {
                 if (!first) sb.append(", ");
-                sb.append(entry.getKey().getName()).append(":").append(entry.getValue());
+                sb.append(road.destination.getName()).append(":").append(road.cost);
                 first = false;
             }
             sb.append("]");
         }
         return sb.toString();
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -53,21 +68,12 @@ public class City {
         if (this.roads.size() != other.roads.size()) {
             return false;
         }
-        for (Map.Entry<City, Integer> entry : this.roads.entrySet()) {
-            City myDest = entry.getKey();
-            Integer myCost = entry.getValue();
+        for (Map.Entry<String, Road> entry : this.roads.entrySet()) {
+            String destName = entry.getKey();
+            int myCost = entry.getValue().cost;
 
-            boolean found = false;
-            for (Map.Entry<City, Integer> otherEntry : other.roads.entrySet()) {
-                City otherDest = otherEntry.getKey();
-                Integer otherCost = otherEntry.getValue();
-
-                if (myDest.getName().equals(otherDest.getName()) && myCost.equals(otherCost)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+            Road otherRoad = other.roads.get(destName);
+            if (otherRoad == null || otherRoad.cost != myCost) {
                 return false;
             }
         }
@@ -77,10 +83,9 @@ public class City {
     @Override
     public int hashCode() {
         int hash = 0;
-        for (Map.Entry<City, Integer> entry : roads.entrySet()) {
-            hash += entry.getKey().getName().hashCode() + entry.getValue().hashCode();
+        for (Map.Entry<String, Road> entry : roads.entrySet()) {
+            hash += entry.getKey().hashCode() + Integer.hashCode(entry.getValue().cost);
         }
         return hash;
     }
 }
-

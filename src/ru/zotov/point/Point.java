@@ -1,6 +1,6 @@
 package ru.zotov.point;
 
-class Point {
+public class Point implements Cloneable {
     private int x;
     private int y;
 
@@ -18,8 +18,12 @@ class Point {
     }
 
     @Override
+    public Point clone() {
+        return new Point(this.x, this.y);
+    }
+
+    @Override
     public String toString() {
         return "{" + x + ";" + y + "}";
     }
 }
-

@@ -7,14 +7,23 @@ import ru.zotov.bird.Sparrow;
 import ru.zotov.city.City;
 import ru.zotov.city.Route;
 import ru.zotov.city.TwoWayCity;
+import ru.zotov.point.Point;
 import ru.zotov.point.Point3D;
 
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Math.pow;
+
 public class Main {
 
+    public static double power(String xStr, String yStr) {
+        int x = parseInt(xStr);
+        int y = parseInt(yStr);
+        return pow(x, y);
+    }
     public void pressEnterToContinue(Scanner scanner) {
         System.out.print("\n\u001B[90m[ Нажмите Enter, чтобы продолжить... ]\u001B[0m");
         scanner.nextLine();
@@ -48,14 +57,14 @@ public class Main {
 
             switch (subChoice) {
                 case 1:
-                case 2: { // Объединяем логику для пунктов 1 и 2
+                case 2: {
                     System.out.print("  ➔ Введите название нового города: ");
                     String name = scanner.nextLine().trim();
                     System.out.println("  ────────────────────────────────────────────────────");
                     if (cities.containsKey(name)) {
                         System.out.println("  [!] Город с таким названием уже существует.");
                     } else {
-                        // Если выбрали 1 - создаем city.City, если 2 - создаем city.TwoWayCity
+
                         if (subChoice == 1) {
                             cities.put(name, new City(name));
                             System.out.println("  [+] Обычный город " + name + " успешно добавлен.");
@@ -224,7 +233,6 @@ public class Main {
 
         System.out.println("  ────────────────────────────────────────────────────");
     }
-
     void numFour(){
 
         System.out.println("  ── ЗАДАЧА 6: Сравнение городов (equals по набору путей) ──");
@@ -236,6 +244,8 @@ public class Main {
         System.out.println("  [ Создаем Город А (Обычный) и Город Б (Двусторонний)... ]");
         City cityA = new City("Город А");
         TwoWayCity cityB = new TwoWayCity("Город Б");
+
+
         cityA.addRoad(moscow, 1500);
         cityA.addRoad(spb, 2000);
 
@@ -246,7 +256,7 @@ public class Main {
         System.out.println("    " + cityA.getClass().getSimpleName() + ": " + cityA);
         System.out.println("    " + cityB.getClass().getSimpleName() + ": " + cityB);
 
-        System.out.println("  ➔ cityA.equals(cityB): " + cityA.equals(cityB));
+        System.out.println("  ➔ cityA.equals(cityB) : " + cityA.equals(cityB));
 
         System.out.println("\n  [ Меняем стоимость пути в Городе Б... ]");
         cityB.addRoad(moscow, 9999);
@@ -256,7 +266,30 @@ public class Main {
 
         System.out.println("  ────────────────────────────────────────────────────");
     }
+    void numFive(String[] args) {
+        System.out.println("  ── ЗАДАЧА 7: Возведение в степень (Статический импорт) ──");
+        if (args.length >= 2) {
+            String x = args[0];
+            String y = args[1];
+            double result = power(x, y);
+            System.out.println("  ➔ Параметры из командной строки: X = " + x + ", Y = " + y);
+            System.out.println("  ➔ Результат возведения в степень: " + result);
+        } else {
+            System.out.println("  [!] Передайте два аргумента командной строки (например: число X и Y).");
+            System.out.println("      Пример запуска через терминал: java ru.zotov.main.Main 2 3");
+        }
+        System.out.println("  ────────────────────────────────────────────────────");
+    }
+    void numSix() {
+        System.out.println("  ── ЗАДАЧА 8: Клонирование точки ──");
+        Point original = new Point(10, 20);
+        Point clone = original.clone();
 
+        System.out.println("    Оригинальная точка: " + original);
+        System.out.println("    Клонированная точка: " + clone);
+        System.out.println("    Ссылки различаются (original != clone): " + (original != clone));
+        System.out.println("  ────────────────────────────────────────────────────");
+    }
      void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -267,12 +300,12 @@ public class Main {
             System.out.println("  ┌───────────────────────────────────────────┐");
             System.out.println("  │     ЛАБОРАТОРНАЯ РАБОТА №3 • ВАРИАНТ 5    │");
             System.out.println("  └───────────────────────────────────────────┘");
-            System.out.println("    [1] Задание 1 и 2 и 3 и 6: Города и Маршруты и Двусторонняя дорога и Городим"); // Сделано достаточно чтобы любая из 4 задач была решена, для городим просто введем граф с клавы
-            System.out.println("    [2] Задание 4: 3D Точка");
-            System.out.println("    [4] Задание 5: Птицы");
-            System.out.println("    [6] Задание 7: Сравнение городов");
-            System.out.println("    [7] Задание 8: Возведение в степень");
-            System.out.println("    [8] Задание 8: Клонирование точки");
+            System.out.println("    [1] Задание н1 (10) и н2 (5) и н3 (3) и н5(9): Города и Маршруты и Двусторонняя дорога и Городим"); // Сделано достаточно чтобы любая из 4 задач была решена, для городим просто введем граф с клавы
+            System.out.println("    [2] Задание н3 (5) 3D Точка");
+            System.out.println("    [3] Задание н4 (3) Птицы");
+            System.out.println("    [4] Задание н6 (5) Сравнение городов");
+            System.out.println("    [5] Задание н7 (3) Возведение в степень");
+            System.out.println("    [6] Задание 8: Клонирование точки");
             System.out.println("    [0] Выход");
             System.out.println("  ──────────────────────────────────────────");
             System.out.print("  ➔ Выберите номер задачи: ");
@@ -300,24 +333,12 @@ public class Main {
                         break;
                     }
                     case 5: {
-                        System.out.println("  ── ЗАДАЧА 5: Граф (Городим из задач 2.1.10 и 2.3.3) ──");
+                        numFive(args);
                         break;
                     }
                     case 6: {
-                        System.out.println("  ── ЗАДАЧА 6: Сравнение городов (equals по набору путей) ──");
+                        numSix();
                         break;
-                    }
-                    case 7: {
-                        System.out.println("  ── ЗАДАЧА 7: Возведение в степень (Статический импорт) ──");
-                        break;
-                    }
-                    case 8: {
-                        System.out.println("  ── ЗАДАЧА 8: Клонирование точки ──");
-                        break;
-                    }
-                    case 0: {
-                        System.out.println("  Выход из программы...");
-                        return;
                     }
                     default:
                         System.out.println("  [Ошибка] Неверный пункт меню.");
